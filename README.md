@@ -42,5 +42,5 @@ There are six types of measurements (see above), which get assigned to the measu
 The resulting tidy dataset has 180 rows and 68 rows, each row contains mean values per subject per each variable.
 Finally, the tidy dataset is saved to samsung.csv (by default).
 
-It is also possible to plot the data with `plot.tidy()` function, which will save a barplot to "plot.pdf" (or any other name given in `file` parameter). See below.
+It is also possible to plot the data with `plot.tidy(tidy.data)` function, which will save a barplot to "plot.pdf" (or any other name given in `file` parameter). See below.
 

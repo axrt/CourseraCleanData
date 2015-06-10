@@ -229,8 +229,18 @@ tidy.data<-coursera.clean.data.main()
 write.csv(x = tidy.data,file = "samsung.csv", row.names=FALSE)
 message("Tidy data written to samsung.csv :)")
 
+#' Plots the tidy data to a pdf (plot.pdf).
+#' 
+#' @param \code{tidy.data} tidy data
+#' @param \code{file} file to save the plot, default "plot.pdf" in the working directory
+#' @param \code{width} width of the plot, default 100
+#' @param \code{height} height of the plot, default 100
+#' @example \code{
+#' plot.tidy(coursera.clean.data.main())
+#' }
+#' 
 ######## Plot the data ########
-plot.tidy<-function(file="plot.pdf", width = 100, height = 100){
+plot.tidy<-function(tidy.data, file="plot.pdf", width = 100, height = 100){
   tidy.melt<-melt(tidy.data, id.vars=c("Sample","Activity"))
   gp<-ggplot(data=tidy.melt, aes(x=variable, y=value, fill=variable)) + 
     geom_bar(stat="identity")+facet_wrap(~Sample+Activity, nrow=30) + 

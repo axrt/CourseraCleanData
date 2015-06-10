@@ -18,6 +18,10 @@ ext=".txt"
 ######## Libs ########
 #dplyr for dataframe manipulation
 library(dplyr)
+#reshape2 for melt()
+library(reshape2)
+#ggplot2 for graphics output
+library(ggplot2)
 
 ######## Create resource folder ########
 #' Creates a resource folder in the current working directory.
@@ -221,6 +225,30 @@ coursera.clean.data.main<-function(){
 
 ######## Write out the data ########
 #Wirte out the tidy data
-write.csv(x = coursera.clean.data.main(),file = "samsung.csv", row.names=FALSE)
+tidy.data<-coursera.clean.data.main()
+write.csv(x = tidy.data,file = "samsung.csv", row.names=FALSE)
 message("Tidy data written to samsung.csv :)")
+
+######## Plot the data ########
+plot.tidy<-function(file="plot.pdf", width = 100, height = 100){
+  tidy.melt<-melt(tidy.data, id.vars=c("Sample","Activity"))
+  gp<-ggplot(data=tidy.melt, aes(x=variable, y=value, fill=variable)) + 
+    geom_bar(stat="identity")+facet_wrap(~Sample+Activity, nrow=30) + 
+    theme(axis.text.x = element_text(size=20,angle = 90,colour = "grey25"),
+          axis.text.y = element_text(size=14,angle = 90,colour = "grey25"),
+          strip.text = element_text(size = 30),
+          plot.background = element_rect(fill="white", colour = "white"),
+          strip.background = element_rect(fill="grey95", colour = "grey95"),
+          panel.background = element_rect(fill = "white", colour = NA), 
+          panel.border = element_blank(), 
+          panel.grid.major = element_line(colour = "grey95"), 
+          panel.grid.minor = element_line(colour = "grey95", size = 0.25), 
+          panel.margin.x = NULL, 
+          panel.margin.y = NULL,
+          legend.position= "none",
+          axis.ticks = element_line(colour = "grey95"))
+  pdf()
+  plot(gp)
+  dev.off()
+}
 

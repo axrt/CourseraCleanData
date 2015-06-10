@@ -226,7 +226,7 @@ coursera.clean.data.main<-function(){
 ######## Write out the data ########
 #Wirte out the tidy data
 tidy.data<-coursera.clean.data.main()
-write.csv(x = tidy.data,file = "samsung.csv", row.names=FALSE)
+write.table(x = tidy.data,file = "samsung.csv", row.names=FALSE)
 message("Tidy data written to samsung.csv :)")
 
 #' Plots the tidy data to a pdf (plot.pdf).

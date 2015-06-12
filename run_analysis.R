@@ -17,21 +17,26 @@ ext=".txt"
 
 ######## Libs ########
 #dplyr for dataframe manipulation
-library(dplyr)
+if(!require(dplyr)){
+  install.packages(dplyr)
+}
 #reshape2 for melt()
-library(reshape2)
+if(!require(reshape2)){
+  install.packages(reshape2)
+}
 #ggplot2 for graphics output
-library(ggplot2)
+if(!require(ggplot2)){
+  install.packages(ggplot2)
+}
 
 ######## Create resource folder ########
 #' Creates a resource folder in the current working directory.
 #' 
 #' @param \code{res.folder} folder name, default "res". 
 #' @return a path to the resource (\code{y}) folder.
-#' @examples \code{
+#' @examples 
 #' create.res()
 #' create.res("test")
-#' } 
 #' 
 create.res <- function(res.folder="res"){
   #If the resource directory does not exist - create it
@@ -51,11 +56,10 @@ create.res <- function(res.folder="res"){
 #' @param \code{res.folder} folder name, default "res". 
 #' @param \code{file} url to the dataset archive, default "https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip".
 #' @return \code{data.folder} path to the data folder.
-#' @examples \code{
+#' @examples
 #' download.res()
 #' download.res("res")
 #' download.res("res","https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip")
-#' } 
 #' 
 ######## Download data #######
 download.res <-function(res.folder="res", file = "https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip"){
@@ -84,11 +88,10 @@ download.res <-function(res.folder="res", file = "https://d396qusza40orc.cloudfr
 #' @param \code{subject} subject data prefix, default "subject_". 
 #' @param \code{features} features data prefix, default "features". 
 #' @return a list of data frames, each can be accessed by $
-#' @examples \code{
+#' @examples
 #' load.data()
 #' load.data("train")
 #' load.data("train", "test")
-#' } 
 #' 
 ######## Task 1: Merge ######## 
 load.data <- function(train="train",test="test",x.pref="X_",y.pref="y_", subject="subject_", features="features") {
@@ -116,9 +119,8 @@ load.data <- function(train="train",test="test",x.pref="X_",y.pref="y_", subject
 #' 
 #' @param \code{list.of.frames} list of data frames from cell phone dataset, relyes on \link{load.data} function.
 #' @return data frame with x,y,s,features data frames, where x,y and s are rowbibds from the training and test data.
-#' @examples \code{
+#' @examples 
 #' merge.data(load.data())
-#' } 
 #'
 merge.data<-function(list.of.frames){
   #Merge rows
@@ -133,9 +135,8 @@ merge.data<-function(list.of.frames){
 #' 
 #' @param \code{merged.data} list of dataframes from \link{merge.data}.
 #' @return a dataframe of mean values
-#' @examples \code{
+#' @examples
 #' get.mean(merge.data(load.data()))
-#' }
 #' 
 ######## Task 2: Extract Mean, Std ######## 
 get.mean<-function(merged.data){
@@ -150,9 +151,8 @@ get.mean<-function(merged.data){
 #' 
 #' @param \code{merged.data} list of dataframes from \link{merge.data}.
 #' @return a dataframe of std values
-#' @examples \code{
+#' @examples 
 #' get.std(merge.data(load.data()))
-#' }
 #' 
 get.std<-function(merged.data){
   std.data<-merged.data$features.data %>% filter(grepl(x = V2,pattern = "std()",fixed = TRUE))
@@ -166,10 +166,10 @@ get.std<-function(merged.data){
 #' 
 #' @param \code{activiy.labels} name of activity lables table, default "activity_labels".
 #' @return activity labels lookup table
-#' @examples \code{
+#' @examples
 #' read.activity.lookup()
 #' read.activity.lookup("activity_labels")
-#' }
+#' 
 ######## Task 3,4: Descriptive Names ########
 read.activity.lookup<-function(activity.labels="activity_labels"){
   return(read.table(file=paste(data.folder,paste(activity.labels,ext,sep = ""),sep = "/"), stringsAsFactors=FALSE))
@@ -179,9 +179,9 @@ read.activity.lookup<-function(activity.labels="activity_labels"){
 #' 
 #' @param \code{merged.data} list of dataframes from \link{merge.data} funciton. 
 #' @param \code{activity.lookup} lookup table from \link{read.activity.lookup} function. 
-#' @examples {
+#' @examples 
 #' attach.names(merge.data(load.data()),read.activity.lookup())
-#' }
+#' 
 attach.names<-function(merged.data,activity.lookup){
   colnames(merged.data$y)<-"Activity"
   colnames(merged.data$s)<-"Sample"
@@ -192,9 +192,8 @@ attach.names<-function(merged.data,activity.lookup){
 #' Script-like function, the runs the above commands in a proper sequence to clean and tidy-up the data.
 #' 
 #' @return \code{output.data} tidy data frame
-#' @examples \code{
+#' @examples 
 #' write.csv(x = coursera.clean.data.main(),file = "samsung.csv", row.names=FALSE)
-#' }
 #' 
 ######## Task 5: Clean the Data ########
 coursera.clean.data.main<-function(){
@@ -235,9 +234,8 @@ message("Tidy data written to samsung.csv :)")
 #' @param \code{file} file to save the plot, default "plot.pdf" in the working directory
 #' @param \code{width} width of the plot, default 100
 #' @param \code{height} height of the plot, default 100
-#' @example \code{
+#' @example
 #' plot.tidy(coursera.clean.data.main())
-#' }
 #' 
 ######## Plot the data ########
 plot.tidy<-function(tidy.data, file="plot.pdf", width = 100, height = 100){
